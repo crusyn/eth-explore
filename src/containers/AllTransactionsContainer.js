@@ -21,9 +21,7 @@ export default compose(
   ),
   lifecycle({
     componentDidMount() {
-      console.log(this.props.match.params.address);
-      this.props.getTransactions(this.props.match.params.address); //TODO: this will come from the URL
-      //"0x81de1bcab4422a87440e2dd7c56d272ccf1019ac"
+      this.props.getTransactions(this.props.match.params.address);
     }
   })
 )(AllTransactions);
