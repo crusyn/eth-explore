@@ -7,7 +7,7 @@ class App extends Component {
   render() {
     return (
       <Switch>
-        <Route path="/" component={AllTransactionsContainer} />
+        <Route path="/:address" component={AllTransactionsContainer} />
       </Switch>
     );
   }
