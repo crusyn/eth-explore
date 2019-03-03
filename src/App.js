@@ -8,6 +8,7 @@ class App extends Component {
     return (
       <Switch>
         <Route path="/:address" component={AllTransactionsContainer} />
+        <Route path="/" component={AllTransactionsContainer} />
       </Switch>
     );
   }

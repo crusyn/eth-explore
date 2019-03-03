@@ -16,7 +16,10 @@ export function* getTransactions({ payload: { address } }) {
   try {
     const response = yield fetch(tranAPI(address));
     responseBody = yield response.json();
-    if (responseBody.status !== "1") {
+    if (
+      responseBody.status !== "1" &&
+      responseBody.message !== "No transactions found"
+    ) {
       yield put(actions.getTransactions.failure(responseBody.result));
       return;
     }

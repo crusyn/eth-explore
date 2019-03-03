@@ -1,5 +1,6 @@
 import React from "react";
 import TextField from "@material-ui/core/TextField";
+import { searchStatusTypes } from "../constants";
 
 class Search extends React.Component {
   constructor(props) {
@@ -7,26 +8,39 @@ class Search extends React.Component {
     this.state = { value: "" };
 
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleChange = this.handleChange.bind(this);
   }
 
   handleSubmit(event) {
-    console.log(event);
-    console.log("Query Submitted: " + this.state.value);
     event.preventDefault();
+    this.props.search(this.state.value);
+  }
+
+  handleChange(event) {
+    this.setState({ value: event.target.value });
   }
 
   //working with controlled components and submitting: https://reactjs.org/docs/forms.html
 
   render() {
     return (
-      <form onSubmit={this.handleSubmit}>
-        <TextField
-          placeholder="search for an ethereum address to show account and transaction details"
-          autoFocus={true}
-          fullWidth={true}
-        />
-        <input type="submit" value="Submit" />
-      </form>
+      <div>
+        <form onSubmit={this.handleSubmit}>
+          <TextField
+            placeholder="search for an ethereum address to show account and transaction details"
+            autoFocus={true}
+            fullWidth={true}
+            value={this.state.value}
+            onChange={this.handleChange}
+          />
+        </form>
+        <p>
+          {this.props.searchStatus.message &&
+          this.props.searchStatus.type === searchStatusTypes.ERROR
+            ? this.props.searchStatus.message
+            : " "}
+        </p>
+      </div>
     );
   }
 }

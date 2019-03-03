@@ -4,7 +4,9 @@ import actions from "../actions";
 
 import { Search } from "../components/";
 
-const mapStateToProps = state => ({});
+const mapStateToProps = state => ({
+  searchStatus: state.searchStatus
+});
 
 const mapDispatchToProps = dispatch => ({
   search(query) {
