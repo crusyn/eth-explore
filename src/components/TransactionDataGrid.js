@@ -17,7 +17,10 @@ import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
 import DeleteIcon from "@material-ui/icons/Delete";
 import FilterListIcon from "@material-ui/icons/FilterList";
+import Link from "@material-ui/core/Link";
 import { lighten } from "@material-ui/core/styles/colorManipulator";
+
+import { Link as RouterLink } from "react-router-dom";
 
 function desc(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -54,7 +57,8 @@ const columnHeaders = [
   },
   { id: "from", numeric: true, disablePadding: false, label: "from" },
   { id: "to", numeric: true, disablePadding: false, label: "to" },
-  { id: "value", numeric: true, disablePadding: false, label: "value" }
+  { id: "value", numeric: true, disablePadding: false, label: "value" },
+  { id: "inout", numeric: false, disablePadding: false, label: "" }
 ];
 
 class EnhancedTableHead extends React.Component {
@@ -242,7 +246,9 @@ class EnhancedTable extends React.Component {
     this.setState({ selected: [] });
   };
 
-  handleClick = (event, id) => {
+  handleClick = (event, id) => {};
+
+  selectRow = (event, id) => {
     const { selected } = this.state;
     const selectedIndex = selected.indexOf(id);
     let newSelected = [];
@@ -279,6 +285,22 @@ class EnhancedTable extends React.Component {
     const emptyRows =
       rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage);
 
+    //TODO: don't love that this is here, would prefer the format function to be passed in with each value
+    const ethAddressLink = (address, noLinkAddress) => {
+      const shortenedAddress = address
+        ? address.substring(0, 5) + "..." + address.substring(30, 42)
+        : "";
+      return address === noLinkAddress ? (
+        <div>
+          <strong>{shortenedAddress}</strong>
+        </div>
+      ) : (
+        <Link component={RouterLink} to={"/" + address}>
+          {shortenedAddress}
+        </Link>
+      );
+    };
+
     return (
       <Paper className={classes.root}>
         <EnhancedTableToolbar
@@ -312,12 +334,28 @@ class EnhancedTable extends React.Component {
                       selected={isSelected}
                     >
                       <TableCell padding="checkbox">
-                        <Checkbox checked={isSelected} />
+                        <Checkbox
+                          checked={isSelected}
+                          onChange={event => this.selectRow(event, n.id)}
+                        />
                       </TableCell>
                       <TableCell align="right">{n.blockNumber}</TableCell>
-                      <TableCell align="right">{n.from}</TableCell>
-                      <TableCell align="right">{n.to}</TableCell>
-                      <TableCell align="right">{n.value}</TableCell>
+                      <TableCell align="right">
+                        {ethAddressLink(n.from, this.props.ethAddress)}
+                      </TableCell>
+                      <TableCell align="right">
+                        {ethAddressLink(n.to, this.props.ethAddress)}
+                      </TableCell>
+                      <TableCell align="right">
+                        {n.value / 1000000000000000000}
+                      </TableCell>
+                      <TableCell>
+                        {n.from === this.props.ethAddress
+                          ? "OUT"
+                          : n.to === this.props.ethAddress
+                          ? "IN"
+                          : ""}
+                      </TableCell>
                     </TableRow>
                   );
                 })}

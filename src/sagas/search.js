@@ -1,6 +1,7 @@
 import { takeEvery, put } from "redux-saga/effects";
 import { actions, types } from "../actions";
 import { searchQueryTypes, searchErrorTypes } from "../constants";
+import { push } from "connected-react-router";
 
 export function* search({ payload: { query } }) {
   let trimmedQuery;
@@ -32,9 +33,12 @@ export function* search({ payload: { query } }) {
     );
   }
 
-  if (queryType === searchQueryTypes.ADDRESS) {
-    yield put(actions.getTransactions.call(trimmedQuery));
+  if (
+    queryType === searchQueryTypes.ADDRESS ||
+    queryType === searchQueryTypes.NONE
+  ) {
     yield put(actions.search.success(queryType, trimmedQuery));
+    yield put(push("/" + trimmedQuery));
   }
 }
 

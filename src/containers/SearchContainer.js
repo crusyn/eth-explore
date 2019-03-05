@@ -1,5 +1,6 @@
 import { compose } from "recompose";
 import { connect } from "react-redux";
+import { withRouter } from "react-router-dom";
 import actions from "../actions";
 
 import { Search } from "../components/";
@@ -15,6 +16,7 @@ const mapDispatchToProps = dispatch => ({
 });
 
 export default compose(
+  withRouter,
   connect(
     mapStateToProps,
     mapDispatchToProps

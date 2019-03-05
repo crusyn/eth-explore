@@ -14,6 +14,7 @@ class Search extends React.Component {
   handleSubmit(event) {
     event.preventDefault();
     this.props.search(this.state.value);
+    this.setState({ value: "" });
   }
 
   handleChange(event) {
@@ -27,7 +28,7 @@ class Search extends React.Component {
       <div>
         <form onSubmit={this.handleSubmit}>
           <TextField
-            placeholder="search for an ethereum address to show account and transaction details"
+            placeholder="search for an ethereum address"
             autoFocus={true}
             fullWidth={true}
             value={this.state.value}

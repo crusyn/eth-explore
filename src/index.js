@@ -1,8 +1,9 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import App from "./App";
-import { BrowserRouter as Router } from "react-router-dom";
 import { Provider as ReduxProvider } from "react-redux";
+import { ConnectedRouter, routerMiddleware } from "connected-react-router";
+import { createBrowserHistory } from "history";
 
 import { createStore, applyMiddleware } from "redux";
 import createSagaMiddleware from "redux-saga";
@@ -14,18 +15,22 @@ import { createLogger } from "redux-logger";
 
 import * as serviceWorker from "./serviceWorker";
 
+export const history = createBrowserHistory();
+
 const sagaMiddleware = createSagaMiddleware();
+const routerMiddlewareHistory = routerMiddleware(history);
+
 const store = createStore(
-  reducers,
-  applyMiddleware(sagaMiddleware, createLogger())
+  reducers(history),
+  applyMiddleware(sagaMiddleware, createLogger(), routerMiddlewareHistory)
 );
 sagaMiddleware.run(sagas);
 
 ReactDOM.render(
   <ReduxProvider store={store}>
-    <Router>
+    <ConnectedRouter history={history}>
       <App />
-    </Router>
+    </ConnectedRouter>
   </ReduxProvider>,
   document.getElementById("root")
 );

@@ -12,6 +12,11 @@ const tranAPI = account => {
 };
 
 export function* getTransactions({ payload: { address } }) {
+  if (!address) {
+    yield put(actions.getTransactions.success([]));
+    return;
+  }
+
   let responseBody;
   try {
     const response = yield fetch(tranAPI(address));
