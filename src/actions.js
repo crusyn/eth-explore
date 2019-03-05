@@ -13,13 +13,13 @@ export const types = {
 
 export const actions = {
   getTransactions: {
-    call: address => ({
+    call: (address, startDate = "", endDate = "") => ({
       type: types.GET_TRANSACTIONS.CALL,
-      payload: { address }
+      payload: { address, startDate, endDate }
     }),
-    success: transactions => ({
+    success: (transactions, account) => ({
       type: types.GET_TRANSACTIONS.SUCCESS,
-      payload: { transactions }
+      payload: { transactions, account }
     }),
     failure: error => ({
       type: types.GET_TRANSACTIONS.FAILURE,

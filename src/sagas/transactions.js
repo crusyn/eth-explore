@@ -1,8 +1,9 @@
 import { takeEvery, put } from "redux-saga/effects";
 import { actions, types } from "../actions";
 
+const etherscanAPIKey = "D181DZZYNHEWNN9R76CPGUVNGM53YSBF97";
+
 const tranAPI = account => {
-  const etherscanAPIKey = "D181DZZYNHEWNN9R76CPGUVNGM53YSBF97";
   return (
     "http://api.etherscan.io/api?module=account&action=txlist&address=" +
     account +
@@ -11,27 +12,106 @@ const tranAPI = account => {
   );
 };
 
-export function* getTransactions({ payload: { address } }) {
+const balanceAPI = account => {
+  return (
+    "https://api.etherscan.io/api?module=account&action=balance&address=" +
+    account +
+    "&tag=latest&apikey=" +
+    etherscanAPIKey
+  );
+};
+
+const sumOfTrans = (trans, address) => {
+  if (trans == null) return 0;
+  let totalIn = 0;
+  let totalOut = 0;
+  let gasFees = 0;
+  trans.forEach(tran => {
+    if (!isNaN(tran.value)) {
+      if (tran.from === address && tran.to !== address) {
+        totalOut = totalOut + parseInt(tran.value);
+        gasFees = gasFees + parseInt(tran.gasUsed) * parseInt(tran.gasPrice);
+      } else if (tran.to === address && tran.from !== address)
+        totalIn = totalIn + parseInt(tran.value);
+    }
+  });
+  const totals = { totalIn, totalOut, gasFees };
+  return totals;
+};
+
+export function* getTransactions({
+  payload: { address, startDate = "", endDate = "" }
+}) {
   if (!address) {
     yield put(actions.getTransactions.success([]));
     return;
   }
 
-  let responseBody;
+  let balanceResponseBody, tranResponseBody;
   try {
-    const response = yield fetch(tranAPI(address));
-    responseBody = yield response.json();
+    //get balance data
+    const balanceResponse = yield fetch(balanceAPI(address));
+    balanceResponseBody = yield balanceResponse.json();
+
+    if (balanceResponseBody.status !== "1") {
+      yield put(actions.getTransactions.failure(balanceResponseBody.result));
+      return;
+    }
+
+    //get tran data
+    const tranResponse = yield fetch(tranAPI(address));
+    tranResponseBody = yield tranResponse.json();
     if (
-      responseBody.status !== "1" &&
-      responseBody.message !== "No transactions found"
+      tranResponseBody.status !== "1" &&
+      tranResponseBody.message !== "No transactions found"
     ) {
-      yield put(actions.getTransactions.failure(responseBody.result));
+      yield put(actions.getTransactions.failure(tranResponseBody.result));
       return;
     }
   } catch (e) {
     yield put(actions.getTransactions.failure(e));
   }
-  yield put(actions.getTransactions.success(responseBody.result));
+
+  const transFromAPI = tranResponseBody.result;
+
+  let filteredTrans = transFromAPI;
+  let netTransValueToToday = 0;
+
+  startDate = "2018-02-01";
+  endDate = "2018-03-01";
+
+  const parsedStart = Math.floor(Date.parse(startDate) / 1000);
+  const parsedEnd = Math.ceil(Date.parse(endDate) / 1000);
+
+  if (parsedEnd > 0) {
+    filteredTrans = yield transFromAPI.filter(
+      tran => tran.timeStamp <= parsedEnd && tran.timeStamp >= parsedStart
+    );
+    const tranBetEndAndToday = yield transFromAPI.filter(
+      tran => tran.timeStamp > parsedEnd
+    );
+    const sumBetEndAndToday = yield sumOfTrans(tranBetEndAndToday, address);
+    netTransValueToToday =
+      sumBetEndAndToday.totalIn -
+      sumBetEndAndToday.totalOut -
+      sumBetEndAndToday.gasFees;
+  }
+
+  const { totalIn, totalOut, gasFees } = yield sumOfTrans(
+    filteredTrans,
+    address
+  );
+
+  yield put(
+    actions.getTransactions.success(filteredTrans, {
+      address: address,
+      balance: balanceResponseBody.result,
+      balanceEndDate: balanceResponseBody.result - netTransValueToToday,
+      totalIn: totalIn,
+      totalOut: totalOut,
+      gasFees: gasFees
+    })
+  );
 }
 
 export default function* watchTransactionSagas() {

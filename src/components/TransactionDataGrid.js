@@ -20,6 +20,8 @@ import FilterListIcon from "@material-ui/icons/FilterList";
 import Link from "@material-ui/core/Link";
 import { lighten } from "@material-ui/core/styles/colorManipulator";
 
+import { formatEthValue } from "../utils";
+
 import { Link as RouterLink } from "react-router-dom";
 
 function desc(a, b, orderBy) {
@@ -49,6 +51,18 @@ function getSorting(order, orderBy) {
 }
 
 const columnHeaders = [
+  {
+    id: "timeStamp",
+    numeric: true,
+    disablePadding: false,
+    label: "date"
+  },
+  {
+    id: "timeStampAsTime",
+    numeric: true,
+    disablePadding: false,
+    label: "time"
+  },
   {
     id: "blockNumber",
     numeric: true,
@@ -301,6 +315,17 @@ class EnhancedTable extends React.Component {
       );
     };
 
+    const timeStampDateFormat = timestamp => {
+      return new Date(timestamp * 1000).toLocaleDateString("en-US");
+    };
+
+    const timeStampTimeFormat = timestamp => {
+      return new Date(timestamp * 1000).toLocaleString("en-US", {
+        hour: "2-digit",
+        minute: "2-digit"
+      });
+    };
+
     return (
       <Paper className={classes.root}>
         <EnhancedTableToolbar
@@ -339,6 +364,12 @@ class EnhancedTable extends React.Component {
                           onChange={event => this.selectRow(event, n.id)}
                         />
                       </TableCell>
+                      <TableCell align="right">
+                        {timeStampDateFormat(n.timeStamp)}
+                      </TableCell>
+                      <TableCell align="right">
+                        {timeStampTimeFormat(n.timeStamp)}
+                      </TableCell>
                       <TableCell align="right">{n.blockNumber}</TableCell>
                       <TableCell align="right">
                         {ethAddressLink(n.from, this.props.ethAddress)}
@@ -347,7 +378,7 @@ class EnhancedTable extends React.Component {
                         {ethAddressLink(n.to, this.props.ethAddress)}
                       </TableCell>
                       <TableCell align="right">
-                        {n.value / 1000000000000000000}
+                        {formatEthValue(n.value)}
                       </TableCell>
                       <TableCell>
                         {n.from === this.props.ethAddress

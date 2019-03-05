@@ -6,7 +6,8 @@ import actions from "../actions";
 import { AllTransactions } from "../components/";
 
 const mapStateToProps = state => ({
-  transactions: state.transactions
+  transactions: state.transactions,
+  account: state.account
 });
 
 const mapDispatchToProps = dispatch => ({
