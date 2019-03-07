@@ -75,6 +75,8 @@ export function* getTransactions({
   } catch (e) {
     yield put(actions.getTransactions.failure(e));
   }
+
+  const transFromAPI = tranResponseBody.result;
   /**
   STUB: starting to map IN/OUT onto area so I don't have to compute in view
 

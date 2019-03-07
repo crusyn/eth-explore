@@ -76,7 +76,7 @@ class Filter extends React.Component {
               id="start-date"
               placeholder="yyyy-mm-dd"
               type="date"
-              label="filter from date"
+              label="filter start date"
               fullWidth={false}
               value={this.state.startDate}
               onChange={this.handleStartDateChange}
@@ -87,7 +87,7 @@ class Filter extends React.Component {
               id="end-date"
               placeholder="yyyy-mm-dd"
               type="date"
-              label="filter to date"
+              label="filter end date"
               fullWidth={false}
               value={this.state.endDate}
               onChange={this.handleEndDateChange}
