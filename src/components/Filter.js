@@ -6,6 +6,7 @@ import Button from "@material-ui/core/Button";
 import Paper from "@material-ui/core/Paper";
 
 import { withStyles } from "@material-ui/core/styles";
+import styles from "./styles";
 
 import { timeStampISO } from "../utils";
 
@@ -115,29 +116,6 @@ class Filter extends React.Component {
     );
   }
 }
-
-const styles = theme => ({
-  root: {
-    width: "100%",
-    marginTop: theme.spacing.unit * 3,
-    marginBottom: theme.spacing.unit * 3,
-    paddingBottom: theme.spacing.unit
-  },
-  main: {
-    marginLeft: theme.spacing.unit * 3,
-    marginRight: theme.spacing.unit * 3
-  },
-  button: {
-    margin: theme.spacing.unit
-  },
-  input: {
-    display: "none"
-  },
-  dateTextFields: {
-    marginRight: theme.spacing.unit,
-    width: "200px"
-  }
-});
 
 Filter.propTypes = {
   classes: PropTypes.object.isRequired

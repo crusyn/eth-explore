@@ -3,24 +3,13 @@ import React from "react";
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import Toolbar from "@material-ui/core/Toolbar";
+
 import { withStyles } from "@material-ui/core/styles";
+import styles from "./styles";
 
 import PropTypes from "prop-types";
 
 import { formatEthValue } from "../utils";
-
-const styles = theme => ({
-  root: {
-    width: "100%",
-    marginTop: theme.spacing.unit * 3,
-    marginBottom: theme.spacing.unit * 3,
-    paddingBottom: theme.spacing.unit
-  },
-  main: {
-    marginLeft: theme.spacing.unit * 3,
-    marginRight: theme.spacing.unit * 3
-  }
-});
 
 const TransactionSummary = ({ classes, account }) => {
   const netChange = account.totalIn - account.totalOut - account.gasFees;

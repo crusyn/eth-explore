@@ -75,8 +75,19 @@ export function* getTransactions({
   } catch (e) {
     yield put(actions.getTransactions.failure(e));
   }
+  /**
+  STUB: starting to map IN/OUT onto area so I don't have to compute in view
 
-  const transFromAPI = tranResponseBody.result;
+  const transFromAPI = tranResponseBody.result.map(tran => {
+    tran =
+      (tran.from === address && tran.to !== address
+        ? "OUT"
+        : (tran.to === address && tran.from !== address
+        ? "TO"
+        : "")
+  });
+
+  **/
 
   let filteredTrans = transFromAPI;
   let netTransValueToToday = 0;
