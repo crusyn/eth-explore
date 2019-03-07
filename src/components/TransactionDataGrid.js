@@ -20,7 +20,11 @@ import FilterListIcon from "@material-ui/icons/FilterList";
 import Link from "@material-ui/core/Link";
 import { lighten } from "@material-ui/core/styles/colorManipulator";
 
-import { formatEthValue } from "../utils";
+import {
+  formatEthValue,
+  timeStampDateFormat,
+  timeStampTimeFormat
+} from "../utils";
 
 import { Link as RouterLink } from "react-router-dom";
 
@@ -313,17 +317,6 @@ class EnhancedTable extends React.Component {
           {shortenedAddress}
         </Link>
       );
-    };
-
-    const timeStampDateFormat = timestamp => {
-      return new Date(timestamp * 1000).toLocaleDateString("en-US");
-    };
-
-    const timeStampTimeFormat = timestamp => {
-      return new Date(timestamp * 1000).toLocaleString("en-US", {
-        hour: "2-digit",
-        minute: "2-digit"
-      });
     };
 
     return (

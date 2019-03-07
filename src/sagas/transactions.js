@@ -40,7 +40,11 @@ const sumOfTrans = (trans, address) => {
 };
 
 export function* getTransactions({
-  payload: { address, startDate = "", endDate = "" }
+  payload: {
+    address = "0x0000000000000000000000000000000000000000",
+    startDate = "",
+    endDate = ""
+  }
 }) {
   if (!address) {
     yield put(actions.getTransactions.success([]));
@@ -77,18 +81,18 @@ export function* getTransactions({
   let filteredTrans = transFromAPI;
   let netTransValueToToday = 0;
 
-  startDate = "2018-02-01";
-  endDate = "2018-03-01";
-
-  const parsedStart = Math.floor(Date.parse(startDate) / 1000);
-  const parsedEnd = Math.ceil(Date.parse(endDate) / 1000);
-
-  if (parsedEnd > 0) {
-    filteredTrans = yield transFromAPI.filter(
-      tran => tran.timeStamp <= parsedEnd && tran.timeStamp >= parsedStart
-    );
+  if (endDate || startDate) {
+    if (!endDate) {
+      filteredTrans = yield transFromAPI.filter(
+        tran => tran.timeStamp >= startDate
+      );
+    } else {
+      filteredTrans = yield transFromAPI.filter(
+        tran => tran.timeStamp <= endDate && tran.timeStamp >= startDate
+      );
+    }
     const tranBetEndAndToday = yield transFromAPI.filter(
-      tran => tran.timeStamp > parsedEnd
+      tran => tran.timeStamp > endDate
     );
     const sumBetEndAndToday = yield sumOfTrans(tranBetEndAndToday, address);
     netTransValueToToday =
@@ -104,12 +108,14 @@ export function* getTransactions({
 
   yield put(
     actions.getTransactions.success(filteredTrans, {
-      address: address,
+      address,
       balance: balanceResponseBody.result,
       balanceEndDate: balanceResponseBody.result - netTransValueToToday,
-      totalIn: totalIn,
-      totalOut: totalOut,
-      gasFees: gasFees
+      totalIn,
+      totalOut,
+      gasFees,
+      startDate,
+      endDate
     })
   );
 }

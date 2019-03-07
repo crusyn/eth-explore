@@ -24,14 +24,7 @@ export const account = (state = accountInitialState, action) => {
     case types.GET_TRANSACTIONS.CALL:
       return state; //TODO add loading logic
     case types.GET_TRANSACTIONS.SUCCESS:
-      return {
-        address: action.payload.account.address,
-        balance: action.payload.account.balance,
-        balanceEndDate: action.payload.account.balanceEndDate,
-        totalIn: action.payload.account.totalIn,
-        totalOut: action.payload.account.totalOut,
-        gasFees: action.payload.account.gasFees
-      };
+      return action.payload.account;
     case types.GET_TRANSACTIONS.FAILURE:
       return state; //TODO: maybe do not blow away state is the load fails
     default:

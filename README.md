@@ -1,4 +1,7 @@
-If you are mining on your own the etherscan API doesn't show blockrewards and gasFees that accrue to your account.
+If you are mining on your own the etherscan API doesn't show blockrewards and gasFees that accrue to your account. (maybe, need to verify this)
+
+TODO:
+not optimized for mobile, could be more reactive
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 

@@ -8,6 +8,11 @@ export const types = {
     CALL: "SEARCH/SEARCH/CALL",
     SUCCESS: "SEARCH/SEARCH/SUCCESS",
     FAILURE: "SEARCH/SEARCH/FAILURE"
+  },
+  FILTER: {
+    CALL: "FILTER/FILTER/CALL",
+    SUCCESS: "FILTER/FILTER/SUCCESS",
+    FAILURE: "FILTER/FILTER/FAILURE"
   }
 };
 
@@ -37,6 +42,20 @@ export const actions = {
     }),
     failure: error => ({
       type: types.SEARCH.FAILURE,
+      payload: error
+    })
+  },
+  filter: {
+    call: (start, end) => ({
+      type: types.FILTER.CALL,
+      payload: { start, end }
+    }),
+    success: (start, end) => ({
+      type: types.FILTER.SUCCESS,
+      payload: { start, end }
+    }),
+    failure: error => ({
+      type: types.FILTER.FAILURE,
       payload: error
     })
   }

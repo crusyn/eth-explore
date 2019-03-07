@@ -2,6 +2,7 @@ import { compose, lifecycle } from "recompose";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import actions from "../actions";
+import queryString from "query-string";
 
 import { AllTransactions } from "../components/";
 
@@ -11,10 +12,15 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  getTransactions(address) {
-    dispatch(actions.getTransactions.call(address));
+  getTransactions(address, start, end) {
+    dispatch(actions.getTransactions.call(address, start, end));
   }
 });
+
+const getTransactionsFromURL = props => {
+  const qs = queryString.parse(props.location.search);
+  props.getTransactions(props.match.params.address, qs.start, qs.end);
+};
 
 export default compose(
   withRouter,
@@ -24,11 +30,11 @@ export default compose(
   ),
   lifecycle({
     componentDidMount() {
-      this.props.getTransactions(this.props.match.params.address);
+      getTransactionsFromURL(this.props);
     },
     componentDidUpdate(prevProps) {
       if (this.props.location !== prevProps.location) {
-        this.props.getTransactions(this.props.match.params.address);
+        getTransactionsFromURL(this.props);
       }
     }
   })

@@ -1,7 +1,8 @@
 import React from "react";
 
-import Typography from "@material-ui/core/Typography";
 import Paper from "@material-ui/core/Paper";
+import Typography from "@material-ui/core/Typography";
+import Toolbar from "@material-ui/core/Toolbar";
 import { withStyles } from "@material-ui/core/styles";
 
 import PropTypes from "prop-types";
@@ -11,13 +12,13 @@ import { formatEthValue } from "../utils";
 const styles = theme => ({
   root: {
     width: "100%",
-    marginTop: theme.spacing.unit * 3
+    marginTop: theme.spacing.unit * 3,
+    marginBottom: theme.spacing.unit * 3,
+    paddingBottom: theme.spacing.unit
   },
-  table: {
-    minWidth: 1020
-  },
-  tableWrapper: {
-    overflowX: "auto"
+  main: {
+    marginLeft: theme.spacing.unit * 3,
+    marginRight: theme.spacing.unit * 3
   }
 });
 
@@ -26,7 +27,11 @@ const TransactionSummary = ({ classes, account }) => {
   return (
     <Paper className={classes.root}>
       <div className={classes.title}>
-        <Typography variant="h6">{"" + account.address}</Typography>
+        <Toolbar>
+          <Typography variant="h6">{"" + account.address}</Typography>
+        </Toolbar>
+      </div>
+      <div className={classes.main}>
         <p>Balance: {formatEthValue(account.balance) + " Ether"}</p>
         <p>
           Balance @ EndDate: {formatEthValue(account.balanceEndDate) + " Ether"}
@@ -37,7 +42,7 @@ const TransactionSummary = ({ classes, account }) => {
         <p>Net Change: {formatEthValue(netChange) + " Ether"}</p>
         <p>
           Balance Forward:{" "}
-          {formatEthValue(account.balance - netChange) + " Ether"}
+          {formatEthValue(account.balanceEndDate - netChange) + " Ether"}
         </p>
       </div>
     </Paper>

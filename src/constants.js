@@ -14,3 +14,7 @@ export const searchErrorTypes = {
   INVALID_ADDRESS: "INVALID_ADDRESS",
   UNKNOWN: "UNKNOWN"
 };
+
+export const filterErrorTypes = {
+  INVALID_DATE: "INVALID_DATE"
+};
