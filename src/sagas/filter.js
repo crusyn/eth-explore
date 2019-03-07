@@ -7,8 +7,8 @@ export function* filter({ payload: { start, end } }) {
   let parsedStart;
   let parsedEnd;
   try {
-    parsedStart = start ? Math.floor(Date.parse(start) / 1000) : "";
-    parsedEnd = end ? Math.ceil(Date.parse(end) / 1000) : "";
+    parsedStart = start ? Math.floor(Date.parse(start) / 1000 + 18000) : "";
+    parsedEnd = end ? Math.ceil(Date.parse(end) / 1000 + 18000) : "";
   } catch (e) {
     put(
       actions.filter.failure({

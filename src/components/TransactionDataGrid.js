@@ -19,6 +19,7 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import FilterListIcon from "@material-ui/icons/FilterList";
 import Link from "@material-ui/core/Link";
 import { lighten } from "@material-ui/core/styles/colorManipulator";
+import { Progress } from "./";
 
 import {
   formatEthValue,
@@ -234,7 +235,10 @@ class EnhancedTable extends React.Component {
   componentDidUpdate(oldProps) {
     const newProps = this.props;
     if (oldProps.tranData !== newProps.tranData) {
-      this.setState({ data: newProps.tranData });
+      this.setState({
+        data: newProps.tranData.transactions,
+        loading: newProps.tranData.loading
+      });
     }
   }
 
@@ -301,7 +305,15 @@ class EnhancedTable extends React.Component {
 
   render() {
     const { classes } = this.props;
-    const { data, order, orderBy, selected, rowsPerPage, page } = this.state;
+    const {
+      data,
+      order,
+      orderBy,
+      selected,
+      rowsPerPage,
+      page,
+      loading
+    } = this.state;
     const emptyRows =
       rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage);
 
@@ -327,72 +339,80 @@ class EnhancedTable extends React.Component {
           numSelected={selected.length}
           tableName={this.props.tableName}
         />
-        <div className={classes.tableWrapper}>
-          <Table className={classes.table} aria-labelledby="tableTitle">
-            <EnhancedTableHead
-              numSelected={selected.length}
-              order={order}
-              orderBy={orderBy}
-              onSelectAllClick={this.handleSelectAllClick}
-              onRequestSort={this.handleRequestSort}
-              rowCount={data.length}
-            />
-            <TableBody>
-              {stableSort(data, getSorting(order, orderBy))
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map(n => {
-                  n.id = n.hash; //TODO: hacky do transform elsewhere
-                  const isSelected = this.isSelected(n.id);
-                  return (
-                    <TableRow
-                      hover
-                      onClick={event => this.handleClick(event, n.id)}
-                      role="checkbox"
-                      aria-checked={isSelected}
-                      tabIndex={-1}
-                      key={n.id}
-                      selected={isSelected}
-                    >
-                      <TableCell padding="checkbox">
-                        <Checkbox
-                          checked={isSelected}
-                          onChange={event => this.selectRow(event, n.id)}
-                        />
-                      </TableCell>
-                      <TableCell align="right">
-                        {timeStampDateFormat(n.timeStamp)}
-                      </TableCell>
-                      <TableCell align="right">
-                        {timeStampTimeFormat(n.timeStamp)}
-                      </TableCell>
-                      <TableCell align="right">{n.blockNumber}</TableCell>
-                      <TableCell align="right">
-                        {ethAddressLink(n.from, this.props.ethAddress)}
-                      </TableCell>
-                      <TableCell align="right">
-                        {ethAddressLink(n.to, this.props.ethAddress)}
-                      </TableCell>
-                      <TableCell align="right">
-                        {formatEthValue(n.value)}
-                      </TableCell>
-                      <TableCell>
-                        {n.from === this.props.ethAddress
-                          ? "OUT"
-                          : n.to === this.props.ethAddress
-                          ? "IN"
-                          : ""}
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
-              {emptyRows > 0 && (
-                <TableRow style={{ height: 49 * emptyRows }}>
-                  <TableCell colSpan={6} />
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </div>
+        {loading ? (
+          <div>
+            <Progress />
+          </div>
+        ) : data.length !== 0 ? (
+          <div className={classes.tableWrapper}>
+            <Table className={classes.table} aria-labelledby="tableTitle">
+              <EnhancedTableHead
+                numSelected={selected.length}
+                order={order}
+                orderBy={orderBy}
+                onSelectAllClick={this.handleSelectAllClick}
+                onRequestSort={this.handleRequestSort}
+                rowCount={data.length}
+              />
+              <TableBody>
+                {stableSort(data, getSorting(order, orderBy))
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map(n => {
+                    n.id = n.hash; //TODO: hacky do transform elsewhere
+                    const isSelected = this.isSelected(n.id);
+                    return (
+                      <TableRow
+                        hover
+                        onClick={event => this.handleClick(event, n.id)}
+                        role="checkbox"
+                        aria-checked={isSelected}
+                        tabIndex={-1}
+                        key={n.id}
+                        selected={isSelected}
+                      >
+                        <TableCell padding="checkbox">
+                          <Checkbox
+                            checked={isSelected}
+                            onChange={event => this.selectRow(event, n.id)}
+                          />
+                        </TableCell>
+                        <TableCell align="right">
+                          {timeStampDateFormat(n.timeStamp)}
+                        </TableCell>
+                        <TableCell align="right">
+                          {timeStampTimeFormat(n.timeStamp)}
+                        </TableCell>
+                        <TableCell align="right">{n.blockNumber}</TableCell>
+                        <TableCell align="right">
+                          {ethAddressLink(n.from, this.props.ethAddress)}
+                        </TableCell>
+                        <TableCell align="right">
+                          {ethAddressLink(n.to, this.props.ethAddress)}
+                        </TableCell>
+                        <TableCell align="right">
+                          {formatEthValue(n.value)}
+                        </TableCell>
+                        <TableCell>
+                          {n.from === this.props.ethAddress
+                            ? "OUT"
+                            : n.to === this.props.ethAddress
+                            ? "IN"
+                            : ""}
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
+                {emptyRows > 0 && (
+                  <TableRow style={{ height: 49 * emptyRows }}>
+                    <TableCell colSpan={6} />
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </div>
+        ) : (
+          <div />
+        )}
         <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
           component="div"

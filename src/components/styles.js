@@ -17,7 +17,7 @@ const styles = theme => ({
   },
   dateTextFields: {
     marginRight: theme.spacing.unit,
-    width: "200px"
+    width: 200
   }
 });
 

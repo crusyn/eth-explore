@@ -1,6 +1,6 @@
 import React from "react";
 import { SearchContainer, FilterContainer } from "../containers";
-import EnhancedTable from "./TransactionDataGrid";
+import TransactionTable from "./TransactionDataGrid";
 import { TransactionSummary } from "./";
 
 const AllTransactions = ({ account, transactions, match }) => {
@@ -8,12 +8,12 @@ const AllTransactions = ({ account, transactions, match }) => {
     <div>
       <SearchContainer />
       <TransactionSummary account={account} />
-      <EnhancedTable
+      <FilterContainer />
+      <TransactionTable
         tranData={transactions}
         tableName="Transaction Data"
         ethAddress={match.params.address}
       />
-      <FilterContainer />
     </div>
   );
 };

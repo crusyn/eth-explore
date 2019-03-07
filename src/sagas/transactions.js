@@ -40,14 +40,10 @@ const sumOfTrans = (trans, address) => {
 };
 
 export function* getTransactions({
-  payload: {
-    address = "0x0000000000000000000000000000000000000000",
-    startDate = "",
-    endDate = ""
-  }
+  payload: { address = "", startDate = "", endDate = "" }
 }) {
   if (!address) {
-    yield put(actions.getTransactions.success([]));
+    yield put(actions.getTransactions.success([], {}));
     return;
   }
 
@@ -74,22 +70,10 @@ export function* getTransactions({
     }
   } catch (e) {
     yield put(actions.getTransactions.failure(e));
+    return;
   }
 
   const transFromAPI = tranResponseBody.result;
-  /**
-  STUB: starting to map IN/OUT onto area so I don't have to compute in view
-
-  const transFromAPI = tranResponseBody.result.map(tran => {
-    tran =
-      (tran.from === address && tran.to !== address
-        ? "OUT"
-        : (tran.to === address && tran.from !== address
-        ? "TO"
-        : "")
-  });
-
-  **/
 
   let filteredTrans = transFromAPI;
   let netTransValueToToday = 0;
@@ -119,14 +103,21 @@ export function* getTransactions({
     address
   );
 
+  const balance = balanceResponseBody.result;
+  const balanceEndDate = balance - netTransValueToToday;
+  const netChange = totalIn - totalOut - gasFees;
+  const balanceForward = balanceEndDate - netChange;
+
   yield put(
     actions.getTransactions.success(filteredTrans, {
       address,
-      balance: balanceResponseBody.result,
-      balanceEndDate: balanceResponseBody.result - netTransValueToToday,
+      balance,
+      balanceEndDate,
+      balanceForward,
       totalIn,
       totalOut,
       gasFees,
+      netChange,
       startDate,
       endDate
     })
