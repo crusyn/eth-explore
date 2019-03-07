@@ -12,34 +12,23 @@ import PropTypes from "prop-types";
 
 import { formatEthValue, timeStampDateFormat } from "../utils";
 
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
+import Grid from "@material-ui/core/Grid";
 
-const CustomTableCell = withStyles(theme => ({
-  head: {
-    backgroundColor: theme.palette.common.white,
-    color: theme.palette.common.black,
-    fontSize: 16
-  },
-  body: {
-    fontSize: 14
-  },
-  root: {
-    outline: "none"
-  }
-}))(TableCell);
-
-const OpTableCell = withStyles(theme => ({
-  head: {
-    backgroundColor: theme.palette.common.white,
-    color: theme.palette.common.black,
-    fontSize: 30
-  }
-}))(TableCell);
-
+const GridCard = ({ heading, value, showIfZero }) => (
+  <Grid item>
+    <div
+      style={{
+        paddingBottom: 10,
+        paddingTop: 10,
+        paddingRight: 10,
+        paddingLeft: 10
+      }}
+    >
+      <Typography variant="caption">{heading}</Typography>
+      <div>{value || showIfZero ? formatEthValue(value) : ""}</div>
+    </div>
+  </Grid>
+);
 const TransactionSummary = ({ classes, account }) => {
   return (
     <Paper className={classes.root}>
@@ -53,72 +42,52 @@ const TransactionSummary = ({ classes, account }) => {
       ) : (
         <div className={classes.main}>
           <div>
-            <Typography variant="subheading">balances</Typography>
-            <Table className={classes.table}>
-              <TableHead>
-                <TableRow>
-                  <CustomTableCell>
-                    {account.startDate || account.endDate
-                      ? timeStampDateFormat(account.startDate)
-                      : "latest"}
-                  </CustomTableCell>
-                  <CustomTableCell>
-                    {account.endDate
-                      ? timeStampDateFormat(account.endDate)
-                      : ""}{" "}
-                  </CustomTableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                <TableRow className={classes.row}>
-                  <CustomTableCell align="right">
-                    {account.startDate || account.endDate
-                      ? formatEthValue(account.balanceForward)
-                      : formatEthValue(account.balance)}
-                  </CustomTableCell>
-                  <CustomTableCell align="right">
-                    {account.endDate
-                      ? formatEthValue(account.balanceEndDate)
-                      : ""}
-                  </CustomTableCell>
-                </TableRow>
-              </TableBody>
-            </Table>
+            {account.startDate || account.endDate ? (
+              <div>
+                <Typography variant="subheading">balances</Typography>
+                <Grid container spacing={16}>
+                  {account.startDate ? (
+                    <GridCard
+                      heading={timeStampDateFormat(account.startDate)}
+                      value={account.balanceForward}
+                    />
+                  ) : (
+                    ""
+                  )}
+                  <GridCard
+                    heading={
+                      account.endDate
+                        ? timeStampDateFormat(account.endDate)
+                        : ""
+                    }
+                    value={account.endDate ? account.balanceEndDate : ""}
+                  />
+                </Grid>
+              </div>
+            ) : (
+              <div>
+                <Typography variant="subheading">balance</Typography>
+                <div
+                  style={{
+                    paddingBottom: 10,
+                    paddingTop: 10,
+                    paddingRight: 10,
+                    paddingLeft: 10
+                  }}
+                >
+                  {formatEthValue(account.balance)}
+                </div>
+              </div>
+            )}
           </div>
           <div>
             <Typography variant="subheading">transaction totals</Typography>
-            <Table className={classes.table}>
-              <TableHead>
-                <TableRow>
-                  <CustomTableCell>In</CustomTableCell>
-                  <OpTableCell>-</OpTableCell>
-                  <CustomTableCell>Out</CustomTableCell>
-                  <OpTableCell>-</OpTableCell>
-                  <CustomTableCell>Gas</CustomTableCell>
-                  <OpTableCell>=</OpTableCell>
-                  <CustomTableCell>Net</CustomTableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                <TableRow className={classes.row}>
-                  <CustomTableCell align="right">
-                    {formatEthValue(account.totalIn)}
-                  </CustomTableCell>
-                  <CustomTableCell />
-                  <CustomTableCell align="right">
-                    {formatEthValue(account.totalOut)}
-                  </CustomTableCell>
-                  <CustomTableCell />
-                  <CustomTableCell align="right">
-                    {formatEthValue(account.gasFees)}
-                  </CustomTableCell>
-                  <CustomTableCell />
-                  <CustomTableCell align="right">
-                    {formatEthValue(account.netChange)}
-                  </CustomTableCell>
-                </TableRow>
-              </TableBody>
-            </Table>
+            <Grid container spacing={16}>
+              <GridCard heading="In" value={account.totalIn} showIfZero />
+              <GridCard heading="Out" value={account.totalOut} showIfZero />
+              <GridCard heading="Gas" value={account.gasFees} showIfZero />
+              <GridCard heading="Net" value={account.netChange} showIfZero />
+            </Grid>
           </div>
         </div>
       )}

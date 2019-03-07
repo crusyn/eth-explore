@@ -13,10 +13,7 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import Paper from "@material-ui/core/Paper";
 import Checkbox from "@material-ui/core/Checkbox";
-import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
-import DeleteIcon from "@material-ui/icons/Delete";
-import FilterListIcon from "@material-ui/icons/FilterList";
 import Link from "@material-ui/core/Link";
 import { lighten } from "@material-ui/core/styles/colorManipulator";
 import { Progress } from "./";
@@ -192,21 +189,6 @@ let EnhancedTableToolbar = props => {
         )}
       </div>
       <div className={classes.spacer} />
-      <div className={classes.actions}>
-        {numSelected > 0 ? (
-          <Tooltip title="Delete">
-            <IconButton aria-label="Delete">
-              <DeleteIcon />
-            </IconButton>
-          </Tooltip>
-        ) : (
-          <Tooltip title="Filter list">
-            <IconButton aria-label="Filter list">
-              <FilterListIcon />
-            </IconButton>
-          </Tooltip>
-        )}
-      </div>
     </Toolbar>
   );
 };
@@ -244,7 +226,7 @@ class EnhancedTable extends React.Component {
 
   state = {
     order: "asc",
-    orderBy: "blockNumber",
+    orderBy: "timeStamp",
     selected: [],
     data: [],
     page: 0,
