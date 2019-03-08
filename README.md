@@ -4,10 +4,11 @@ A block explorer with a transaction summary for quick analysis.
 
 ## running the app
 
-You can run eth explore by:
-
-1. running `npm install` to install any dependencies and then
-2. `npm start` the app will load at http://localhost:3000.
+1. clone the repo `git clone git@github.com:crusyn/eth-explore.git`
+2. `cd eth-explore`
+3. run `npm install`
+4. run `npm start`
+5. the app will load at http://localhost:3000.
 
 ## usage
 
