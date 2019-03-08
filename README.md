@@ -68,7 +68,8 @@ If the API fetch fails or etherscan complains about the fetch url the saga dispa
 
 Used Material UI components:
 
-- Material Table components for `TransactionDataGrid` - Material circular progress loading indicator
+- Material Table components for `TransactionDataGrid`
+- Material circular progress loading indicator between transaction and account data fetches
 - Typography throughout the app so it can quickly be updated with a new theme
 
 ### improvements
