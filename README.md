@@ -43,7 +43,7 @@ React lifecycle methods in the `AllTransactionsContainer` listen for location ch
 
 ### redux
 
-Using redux for state management. There are three reducers:
+Redux is used for state management. There are three reducers:
 
 1. _transactions_ - store transactions for a particular address
 2. _account_ - stores account related information including `address`, `balance`, and aggregate transaction information.
