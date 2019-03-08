@@ -40,8 +40,6 @@ class Filter extends React.Component {
   }
 
   handleSubmit(event) {
-    console.log(this.state.startDate);
-    console.log(this.state.endDate);
     event.preventDefault();
     this.props.filter(this.state.startDate, this.state.endDate);
   }

@@ -1,73 +1,98 @@
-If you are mining on your own the etherscan API doesn't show blockrewards and gasFees that accrue to your account. (maybe, need to verify this)
+# Eth Explore
 
-TODO:
-not optimized for mobile, could be more reactive
+## running the app
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+You can run eth explore by running `npm install` to install any dependencies and then `npm start`.
 
-## Available Scripts
+## usage
 
-In the project directory, you can run:
+This block explorer was built for folks would want transaction summary information for ethereum accounts.
 
-### `npm start`
+Many users especially miners would like to review aggregate ethereum transaction summary information for a specific period in time.
 
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+### search
 
-The page will reload if you make edits.<br>
-You will also see any lint errors in the console.
+A user can search for an address by entering it into the search text area at the top of the window.
 
-### `npm test`
+### filter dates
 
-Launches the test runner in the interactive watch mode.<br>
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+A user can filter transaction data to see a summary and underlying transactions
 
-### `npm run build`
+The application is driven by the URI in the following form:
+`domain.com/{ethereumAddress}?start={startTime}&end={endTime}`
 
-Builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance.
+A user can bookmark a particular address with or without filters to reference them at a later time.
 
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
+## architecture
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+The application is driven by the URI.
 
-### `npm run eject`
+The `AllTransactionsContainer` and `Component` contain all other components in the app.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+Lifecycle methods on the `AllTransactionsContainer` listen for location changes and update the app based on address and filter terms.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### redux
 
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+Using redux & saga for async actions and side effects.
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+#### `actions.js`
 
-## Learn More
+All actions and related types are listed in `actions.js`.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+#### `search` saga
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+Set up to be able to scale to adding other search terms such as blocks, transaction hashes, etc. The `search` saga determines the search type based on the input.
 
-### Code Splitting
+I put this into a saga because I thought I may want to call an endpoint to validate an input. This can probably just be a reducer.
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
+A valid input is pushed to the URI, which triggers a pull from the API.
 
-### Analyzing the Bundle Size
+#### `filter` saga
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
+Similar to search, the filter saga checks the validity of the filter dates and then pushes them
 
-### Making a Progressive Web App
+#### `transactions` saga
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
+The Transactions saga is the workhorse of the app and performs all API fetches and state changes for both the account and transaction data.
 
-### Advanced Configuration
+It also performs calculations to determine transaction aggregates `totalIn`, `totalOut`, `gasFees`, `netChange`, `balanceForward`, and `balanceEndDate`.
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
+### improvements
 
-### Deployment
+#### documentation
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
+#### unit testing - jest
 
-### `npm run build` fails to minify
+[ ] Redux & Saga - especially for the calcs
+[ ] Components
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+#### design
+
+[ ] More responsive - Test different screen sizes. I could do clever things such as hide columns in the table, truncate cell data. The transaction summary components use grids so they work with screen size changes. Would have to carefully check word wrapping for each component to handle overflow, etc as makes sense.
+[ ] Transaction Summary Component Design - Spend more time improving the design of this component. Start and End date balances are a little confusing, and the overall design leaves something to be desired.
+[ ] Design - I used Material UI components. I included a Material circular progress loading indicator. Used Typography throughout the app so it can quickly be updated with a new theme. With more time we could play with the Material UI theme to change overall color palette.
+
+#### calculations & data
+
+The transaction summary calculation engine was not carefully tested. If this was a bigger project we would probably start by building a set of unit tests to see how the engine would perform under the following conditions:
+[ ] Validate address & query string validity pulled from URI - bad inputs will cause failures in getTransactions.
+[ ] Contract addresses - balances for contract addresses do not seem to be correct.
+[ ] Block/Uncle rewards - block rewards and accrued gas fees do not show up in our block explorer. Most miners will use a mining pool. So their rewards are distributed as normal transactions.
+[ ] > 10k transactions - the api will only serve 10k transactions at a time. If we needed more than that we would have to use start and end block params to load 10k at a time. If there are more than 10k transactions aggregates will not be correct.
+[ ] Negative start balance - there are instances where the start balance is negative. This would need to be investigated. It doesn't seem to happen with ordinary accounts.
+
+#### state management
+
+[ ] Selectors - Use selectors for filters instead of hitting the API each time.
+[ ] API pagination - It would improve the user experience to use the pagination feature of etherscan and serve 25 or so transactions at time to the user as they are downloaded. Stats would have to wait to be loaded after all transactions are downloaded.
+[ ] Prefetch Addresses - Prefetch addresses that are linked
+[ ] Auto fetch - fetch new transactions & on an interval, add only recent transactions by sending start blocknumber
+
+#### product
+
+[ ] Transaction selection - allow people to select transactions to exclude or summarize
+[ ] Copy Address to clickboard
+[ ] Add last updated time for each card
+[ ] Address watchlist
+[ ] Change addresses
+[ ] Save settings to file - keep it decentralized :). The app won't keep any user search history or data. Also means we can just deploy to an s3 bucket.

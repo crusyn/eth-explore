@@ -210,6 +210,9 @@ const styles = theme => ({
   },
   tableWrapper: {
     overflowX: "auto"
+  },
+  noWrap: {
+    whiteSpace: "nowrap"
   }
 });
 
@@ -361,7 +364,7 @@ class EnhancedTable extends React.Component {
                         <TableCell align="right">
                           {timeStampDateFormat(n.timeStamp)}
                         </TableCell>
-                        <TableCell align="right">
+                        <TableCell className={classes.noWrap} align="right">
                           {timeStampTimeFormat(n.timeStamp)}
                         </TableCell>
                         <TableCell align="right">{n.blockNumber}</TableCell>

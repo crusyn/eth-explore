@@ -34,12 +34,14 @@ const TransactionSummary = ({ classes, account }) => {
     <Paper className={classes.root}>
       <div className={classes.title}>
         <Toolbar>
-          <Typography variant="h6">{"" + account.address}</Typography>
+          <Typography variant="h6">
+            {account.address ? account.address : "0x"}
+          </Typography>
         </Toolbar>
       </div>
       {account.loading ? (
         <Progress />
-      ) : (
+      ) : account.address ? (
         <div className={classes.main}>
           <div>
             {account.startDate || account.endDate ? (
@@ -90,6 +92,14 @@ const TransactionSummary = ({ classes, account }) => {
             </Grid>
           </div>
         </div>
+      ) : (
+        <Typography
+          className={classes.main}
+          color="textSecondary"
+          variant="subheading"
+        >
+          please search for an address above
+        </Typography>
       )}
     </Paper>
   );
