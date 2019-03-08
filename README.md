@@ -24,26 +24,59 @@ A user can search for an address by entering it into the search text area at the
 
 ### filter dates
 
-A user can filter transaction data to see a summary and underlying transactions.
+A user can filter transaction data to see a summary and underlying transactions. A filter can be made up of a start date, end date or both.
 
-The application is driven by the URI in the following form:
+### transactions
+
+Transactions are listed in the third card in a data table. The data table can be sorted on any field. Transactions can also be selected, but this doesn't do anything yet :).
+
+### browser bookmarks and links
+
+The application is driven by the browser URL in the following form:
 `domain.com/{ethereumAddress}?start={startTime}&end={endTime}`
 
 A user can bookmark a particular address with or without filters to reference them at a later time.
 
 ## architecture
 
-The application is driven by the URI.
+This is a react application using redux & saga for state management.
+
+### react components
 
 The `containers/AllTransactionsContainer.js` and `components/AllTransactions.js` contain all other components in the app.
 
-React lifecycle methods in the `AllTransactionsContainer` listen for location changes and update the app based on address and filter terms.
-
-### components
-
 ### redux
 
-Redux is used for state management. There are three reducers:
+This app uses redux to make it easy to understand the applications data flow and state transitions.
+
+#### overall application flow
+
+1. _User Query or Filter_ - The user searches for an _ethereum address_ or _filters the current view with a date range_.
+2. _Action Dispatched_ - The search or filter form submit dispatches a `SEARCH/` or `FILTER/` action to the store.
+
+_Valid Action_ - If the action is valid the corresponding saga will push the `address` or `startDate` and/or `endDate` to the browser history and a `/SUCCESS` action.
+
+_Invalid Action_ - If the input is invalid it will push a `/FAILURE` action with the corresponding error. The source component will display the error to the user.
+
+3. In the case of a _Valid Action_ a corresponding `@@router/CALL_HISTORY_METHOD` pushing the change to the /{address} or ?queryParams
+
+4. _Location Change_ - If the location changes the `AllTransactionsContainer` lifecycle method hears the location change and dispatches a `TRANSACTIONS/GET_TRANSACTIONS/CALL` with the new `address`, `startDate`, and/or `endDate` from the URL.
+
+5. _Reducers in Loading State_ - The .loading members of the `account` and `transactions` reducers will be set to `true` and the `TransactionDataGrid` and `Transaction Summary` will show a loading progress animation.
+
+6. _GET_TRANSACTIONS_ - The [`sagas/transactions.js`](https://github.com/crusyn/eth-explore#sagastransactionsjs-saga) tries to get account and transaction data from etherscan, filters, and does some calcs.
+
+_SUCCESS_ - If `GET_TRANSACTIONS/CALL` succeeds the account and transactions reducers update the store
+
+_FAILURE_ - If the `GET_TRANSACTIONS/CALL` fails the account and transactions reducers do not make changes to the core state.
+
+Either way the `.loading` member is set to `false`.
+
+7. _Components Updated_ - The `Transaction Summary` and `TransactionDataGrid` loading animation is replaced with rendered `account` and `transactions` data from the store.
+
+### reducers
+
+There are three reducers:
 
 1. _transactions_ - store transactions for a particular address
 2. _account_ - stores account related information including `address`, `balance`, and aggregate transaction information.
@@ -51,7 +84,7 @@ Redux is used for state management. There are three reducers:
 
 #### `actions.js`
 
-All actions that can be dispatch to the store and related types are listed in `actions.js`.
+All actions that can be dispatched to the store and related types are listed in `actions.js`.
 
 Each action type can be in three states:
 
@@ -61,7 +94,7 @@ Each action type can be in three states:
 
 ### sagas
 
-Using `redux-saga` for API fetches and pushes to the browser history and change the URL. Using `connected-react-router` so that state changes can be dispatched as actions into the store.
+`redux-saga` is used for API fetches and pushes to the browser history to change the URL. `connected-react-router` is used so that state changes can be dispatched as actions into the store.
 
 #### `sagas/search.js`
 
@@ -69,7 +102,7 @@ The `search.js` saga handles input into the search text field at the top of the 
 
 It is set up to be able to scale to adding other search terms such as blocks, transaction hashes, etc. The `search.js` saga determines the search type based on the input.
 
-A valid input is pushed to the URI, which triggers a pull from the API.
+A valid `searchQueryTypes.ADDRESS` search ultimately triggers a change to the address in the URL.
 
 #### `sagas/filter.js`
 

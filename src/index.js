@@ -11,7 +11,7 @@ import createSagaMiddleware from "redux-saga";
 import reducers from "./reducers";
 import sagas from "./sagas";
 
-//import { createLogger } from "redux-logger";
+import { createLogger } from "redux-logger";
 
 import * as serviceWorker from "./serviceWorker";
 
@@ -22,7 +22,7 @@ const routerMiddlewareHistory = routerMiddleware(history);
 
 const store = createStore(
   reducers(history),
-  applyMiddleware(sagaMiddleware, routerMiddlewareHistory) //createLogger(),
+  applyMiddleware(sagaMiddleware, createLogger(), routerMiddlewareHistory) //,
 );
 sagaMiddleware.run(sagas);
 
