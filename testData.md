@@ -1,9 +1,9 @@
 addresses to test:
 
-US Mining address
+Mining address
 0x6b192c28626a99ccb666c1528f6b3cd332183ff1
 
-my CNYC token address
+CNYC token address
 0x81de1bcab4422a87440e2dd7c56d272ccf1019ac
 
 empty address

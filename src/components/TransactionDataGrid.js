@@ -195,7 +195,8 @@ let EnhancedTableToolbar = props => {
 
 EnhancedTableToolbar.propTypes = {
   classes: PropTypes.object.isRequired,
-  numSelected: PropTypes.number.isRequired
+  numSelected: PropTypes.number.isRequired,
+  tableName: PropTypes.string
 };
 
 EnhancedTableToolbar = withStyles(toolbarStyles)(EnhancedTableToolbar);
@@ -419,7 +420,12 @@ class EnhancedTable extends React.Component {
 }
 
 EnhancedTable.propTypes = {
-  classes: PropTypes.object.isRequired
+  /** classes: Material UI classes object **/
+  classes: PropTypes.object.isRequired,
+  /** tranData: an object containing enriched transactions and loading members see transactions reducer and saga for more information **/
+  tranData: PropTypes.object,
+  /** tableName: name to display in the toolbar of this table **/
+  tableName: PropTypes.string
 };
 
 export default withStyles(styles)(EnhancedTable);

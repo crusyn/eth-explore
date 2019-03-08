@@ -2,7 +2,8 @@ import { types } from "../actions";
 
 const tranInitialState = { loading: false, transactions: [] };
 const accountInitialState = {
-  address: "0x0000000000000000000000000000000000000000",
+  loading: false,
+  address: "",
   balance: -1
 };
 

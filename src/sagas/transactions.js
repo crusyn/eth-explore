@@ -21,6 +21,7 @@ const balanceAPI = account => {
   );
 };
 
+//TODO: needs unit tests
 const sumOfTrans = (trans, address) => {
   if (trans == null) return 0;
   let totalIn = 0;
@@ -75,6 +76,7 @@ export function* getTransactions({
 
   const transFromAPI = tranResponseBody.result;
 
+  //TODO: the bellow needs refactoring and unit tests
   let filteredTrans = transFromAPI;
   let netTransValueToToday = 0;
 
@@ -103,6 +105,7 @@ export function* getTransactions({
     address
   );
 
+  //TODO: needs unit tests
   const balance = balanceResponseBody.result;
   const balanceEndDate = balance - netTransValueToToday;
   const netChange = totalIn - totalOut - gasFees;

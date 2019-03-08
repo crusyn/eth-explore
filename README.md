@@ -71,8 +71,9 @@ It also performs calculations to determine transaction aggregates `totalIn`, `to
 #### design
 
 [ ] More responsive - Test different screen sizes. I could do clever things such as hide columns in the table, truncate cell data. The transaction summary components use grids so they work with screen size changes. Would have to carefully check word wrapping for each component to handle overflow, etc as makes sense.
-[ ] Transaction Summary Component Design - Spend more time improving the design of this component. Start and End date balances are a little confusing, and the overall design leaves something to be desired.
+[ ] Transaction Summary Component Design - Spend more time improving the design of this component. Start and End date balances are a little confusing.
 [ ] Design - I used Material UI components. I included a Material circular progress loading indicator. Used Typography throughout the app so it can quickly be updated with a new theme. With more time we could play with the Material UI theme to change overall color palette.
+[ ] Table Row Selection - Initially had plans to use table row selection to exclude and include transactions in aggregates. I ran out of time. Need to remove table row selection or make it useful. Leaving it in without functionality is confusing.
 
 #### calculations & data
 
