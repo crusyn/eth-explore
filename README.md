@@ -87,10 +87,10 @@ Used Material UI components:
 
 #### state management
 
-[ ] _Validate URL address & query string_ - bad inputs will cause failures in getTransactions.
-[ ] _Add Selectors_ - Cleverly use selectors when possible for filters instead of hitting the API each time.
-[ ] _API pagination_ - Use the pagination feature of etherscan and serve 25 or so transactions at time to the user as they are downloaded to speed up when the user can start looking at data. Stats would have to wait to be loaded after all transactions are downloaded.
-[ ] _Prefetch & Cache Addresses_ - Prefetch transaction and account info for addresses that are listed in the current table view to make navigation within the page nearly instant.
+[ ] _Validate URL address & query string_ - bad inputs will cause failures in getTransactions.  
+[ ] _Add Selectors_ - Cleverly use selectors when possible for filters instead of hitting the API each time.  
+[ ] _API pagination_ - Use the pagination feature of etherscan and serve 25 or so transactions at time to the user as they are downloaded to speed up when the user can start looking at data. Stats would have to wait to be loaded after all transactions are downloaded.  
+[ ] _Prefetch & Cache Addresses_ - Prefetch transaction and account info for addresses that are listed in the current table view to make navigation within the page nearly instant.  
 [ ] _Auto fetch_ - fetch new transactions on an interval, add only recent transactions by sending start blocknumber. Include last updated time on the UI.
 
 #### calculations & data
