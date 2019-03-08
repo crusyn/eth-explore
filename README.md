@@ -73,17 +73,16 @@ If the API fetch fails or etherscan complains about the fetch url the saga dispa
 
 #### design
 
-[ ] _more responsive_ - Test different screen sizes.
-
-- Clever things such as hiding columns in the table, truncate cell data could be worth doing when the viewport size decreases. The transaction summary components use grids so they work with screen size changes.
-- Check word wrapping for each component to handle overflow, etc as makes sense.
-  [ ] _transaction summary component Design_ - Start and End date balances are a little confusing.
-  [ ] _Material UI Improvements_ - Used Material UI components:
-- Material Table components for `TransactionDataGrid`
-- Material circular progress loading indicator
-- Typography throughout the app so it can quickly be updated with a new theme
-- Play with the Material UI theme to change overall color palette
-  [ ] _Table Row Selection_ - Initially had plans to use table row selection to exclude and include transactions in aggregates. Need to remove table row selection or make it useful. Leaving it in without functionality is confusing.
+- _more responsive_ - Test different screen sizes.
+  - Clever things such as hiding columns in the table, truncate cell data could be worth doing when the viewport size decreases. The transaction summary components use grids so they work with screen size changes.
+  - Check word wrapping for each component to handle overflow, etc as makes sense.
+- _transaction summary component Design_ - Start and End date balances are a little confusing.
+- _Material UI Improvements_ - Used Material UI components:
+  - Material Table components for `TransactionDataGrid` - Material circular progress loading indicator
+  - Typography throughout the app so it can quickly be updated with a new theme
+  - Play with the Material UI theme to change overall color palette
+- _Table Row Selection_
+  - Initially had plans to use table row selection to exclude and include transactions in aggregates. Need to remove table row selection or make it useful. Leaving it in without functionality is confusing.
 
 #### state management
 
@@ -103,7 +102,7 @@ The transaction summary calculation engine needs more careful testing. If this w
 
 #### product
 
-[ ] _Transaction selection_ - allow users to select transactions to exclude or summarize
+[ ] _Transaction selection_ - allow users to select transactions to exclude or summarize  
 [ ] _Copy Address_ - Copy Address to clipboard
 [ ] _Last Updated_ - Add last updated time for each card
 [ ] _Address watchlist_ - label addresses for future use.
