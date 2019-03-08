@@ -12,7 +12,7 @@ A block explorer with a transaction summary for quick analysis.
 
 ## usage
 
-This block explorer was built for folks would want transaction summary information for ethereum accounts.
+This block explorer was built for folks who want transaction summary information for ethereum accounts.
 
 Many users like to review aggregate ethereum transaction summary information and/or filter it for a specific date range.
 
@@ -35,29 +35,47 @@ A user can bookmark a particular address with or without filters to reference th
 
 The application is driven by the URI.
 
-The `AllTransactionsContainer` and `Component` contain all other components in the app.
+The `containers/AllTransactionsContainer.js` and `components/AllTransactions.js` contain all other components in the app.
 
-React lifecycle methods on the `AllTransactionsContainer` listen for location changes and update the app based on address and filter terms.
+React lifecycle methods in the `AllTransactionsContainer` listen for location changes and update the app based on address and filter terms.
+
+### components
 
 ### redux
 
-Using redux & saga for async actions and side effects.
+Using redux for state management. There are three reducers:
+
+1. _transactions_ - store transactions for a particular address
+2. _account_ - stores account related information including `address`, `balance`, and aggregate transaction information.
+3. _search_ - the search reducers manages the state of search.
 
 #### `actions.js`
 
-All actions and related types are listed in `actions.js`.
+All actions that can be dispatch to the store and related types are listed in `actions.js`.
 
-#### `search` saga
+Each action type can be in three states:
 
-Set up to be able to scale to adding other search terms such as blocks, transaction hashes, etc. The `search` saga determines the search type based on the input.
+1. _CALL_ - a request was dispatched to the store. The payload is the contents of the request.
+2. _SUCCESS_ - the request was successfully fulfilled. The payload is the result of the request.
+3. _FAILURE_ - the request fulfillment failed. The payload is the error that caused the request to fail.
+
+### sagas
+
+Using `redux-saga` for API fetches and pushes to the browser history and change the URL. Using `connected-react-router` so that state changes can be dispatched as actions into the store.
+
+#### `sagas/search.js`
+
+The `search.js` saga handles input into the search text field at the top of the app.
+
+It is set up to be able to scale to adding other search terms such as blocks, transaction hashes, etc. The `search.js` saga determines the search type based on the input.
 
 A valid input is pushed to the URI, which triggers a pull from the API.
 
-#### `filter` saga
+#### `sagas/filter.js`
 
 Similar to search, the filter saga checks the validity of the filter dates and then pushes them to the query string of the URI in the form: `start={startTime}&end={endTime}`
 
-#### `transactions` saga
+#### `sagas/transactions.js` saga
 
 The Transactions saga is the workhorse of the app and performs all API fetches and state changes for both the account and transaction data.
 
