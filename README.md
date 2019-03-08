@@ -59,12 +59,14 @@ It also performs calculations to determine transaction aggregates `totalIn`, `to
 
 ### improvements
 
-#### documentation
-
 #### unit testing - jest
 
 [ ] Redux & Saga - especially for the calcs
 [ ] Components
+
+#### documentation
+
+[ ] use a js doc framework
 
 #### design
 
