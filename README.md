@@ -68,29 +68,28 @@ If the API fetch fails or etherscan complains about the fetch url the saga dispa
 
 #### unit testing
 
-[ ] Redux & Saga - especially for the calcs
+[ ] Redux & Saga - especially for the calcs  
 [ ] Components
 
 #### design
 
-- _more responsive_ - Test different screen sizes.
-  - Clever things such as hiding columns in the table, truncate cell data could be worth doing when the viewport size decreases. The transaction summary components use grids so they work with screen size changes.
-  - Check word wrapping for each component to handle overflow, etc as makes sense.
-- _transaction summary component Design_ - Start and End date balances are a little confusing.
-- _Material UI Improvements_ - Used Material UI components:
-  - Material Table components for `TransactionDataGrid` - Material circular progress loading indicator
-  - Typography throughout the app so it can quickly be updated with a new theme
-  - Play with the Material UI theme to change overall color palette
+[ ] _more responsive_ - Test different screen sizes: Clever things such as hiding columns in the table, truncating cell data could be worth doing when the viewport size decreases. The transaction summary components use grids so they work with screen size changes. Should check word wrapping for each component to handle overflow, etc as makes sense.  
+[ ] _transaction summary component Design_ - Start and End date balances are a little confusing.  
+[ ] _Material UI Improvements_ - Used Material UI components:
+
+- Material Table components for `TransactionDataGrid` - Material circular progress loading indicator
+- Typography throughout the app so it can quickly be updated with a new theme
+- Play with the Material UI theme to change overall color palette
 - _Table Row Selection_
   - Initially had plans to use table row selection to exclude and include transactions in aggregates. Need to remove table row selection or make it useful. Leaving it in without functionality is confusing.
 
 #### state management
 
-[ ] _Validate URL address & query string_ - bad inputs will cause failures in getTransactions.
-[ ] _Add Selectors_ - Cleverly use selectors when possible for filters instead of hitting the API each time.
-[ ] _API pagination_ - Use the pagination feature of etherscan and serve 25 or so transactions at time to the user as they are downloaded to speed up when the user can start looking at data. Stats would have to wait to be loaded after all transactions are downloaded.
-[ ] _Prefetch & Cache Addresses_ - Prefetch transaction and account info for addresses that are listed in the current table view to make navigation within the page nearly instant.
-[ ] _Auto fetch_ - fetch new transactions on an interval, add only recent transactions by sending start blocknumber. Include last updated time on the UI.
+- _Validate URL address & query string_ - bad inputs will cause failures in getTransactions.
+- _Add Selectors_ - Cleverly use selectors when possible for filters instead of hitting the API each time.
+- _API pagination_ - Use the pagination feature of etherscan and serve 25 or so transactions at time to the user as they are downloaded to speed up when the user can start looking at data. Stats would have to wait to be loaded after all transactions are downloaded.
+- _Prefetch & Cache Addresses_ - Prefetch transaction and account info for addresses that are listed in the current table view to make navigation within the page nearly instant.
+- _Auto fetch_ - fetch new transactions on an interval, add only recent transactions by sending start blocknumber. Include last updated time on the UI.
 
 #### calculations & data
 
