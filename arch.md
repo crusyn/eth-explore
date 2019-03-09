@@ -37,7 +37,7 @@ A URL change can occur when:
 
 5. _Reducers in Loading State_ - The .loading members of the `account` and `transactions` reducers will be set to `true` and the `TransactionDataGrid` and `Transaction Summary` will show a loading progress animation.
 
-6. _GET_TRANSACTIONS_ - The [`sagas/transactions.js`](https://github.com/crusyn/eth-explore#sagastransactionsjs-saga) tries to get account and transaction data from etherscan, filters, and does some calcs.
+6. _GET_TRANSACTIONS_ - The [`sagas/transactions.js`](src/sagas/transactions.js) tries to get account and transaction data from etherscan, filters, and does some calcs.
 
 _SUCCESS_ - If `GET_TRANSACTIONS/CALL` succeeds the account and transactions reducers update the store
 
@@ -59,7 +59,7 @@ There are three reducers:
 
 ### `actions.js`
 
-All actions that can be dispatched to the store and related types are listed in [`actions.js`](actions.js).
+All actions that can be dispatched to the store and related types are listed in [`actions.js`](src/actions.js).
 
 Each action type can be in three states:
 
@@ -73,7 +73,7 @@ Each action type can be in three states:
 
 #### `sagas/search.js`
 
-The [`search.js`](sagas/search.js) saga handles input into the search text field at the top of the app.
+The [`search.js`](src/sagas/search.js) saga handles input into the search text field at the top of the app.
 
 It is set up to be able to scale to adding other search terms such as blocks, transaction hashes, etc. The `search.js` saga determines the search type based on the input.
 
@@ -81,13 +81,13 @@ A valid `searchQueryTypes.ADDRESS` search ultimately triggers a change to the ad
 
 #### `sagas/filter.js`
 
-Similar to search, the [filter saga](sagas/filter.js) checks the validity of the filter dates and then pushes them to the query string of the URI in the form: `start={startTime}&end={endTime}`.
+Similar to search, the [filter saga](src/sagas/filter.js) checks the validity of the filter dates and then pushes them to the query string of the URI in the form: `start={startTime}&end={endTime}`.
 
 A valid filter ultimately triggers a change to the address in the URL. See [overall app flow](#overall-application-flow).
 
 #### `sagas/transactions.js` saga
 
-The [transactions saga](sagas/transactions.js) is the workhorse of the app and performs all API fetches and state changes for both the account and transaction data.
+The [transactions saga](src/sagas/transactions.js) is the workhorse of the app and performs all API fetches and state changes for both the account and transaction data.
 
 It also performs calculations to determine transaction aggregates `totalIn`, `totalOut`, `gasFees`, `netChange`, `balanceForward`, and `balanceEndDate`.
 
