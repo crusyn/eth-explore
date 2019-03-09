@@ -9,7 +9,7 @@
 
 [ ] _more responsive_ - Test different screen sizes: Clever things such as hiding columns in the table, truncating cell data could be worth doing when the viewport size decreases. The transaction summary components use grids so they work with screen size changes. Should check word wrapping for each component to handle overflow, etc as makes sense.  
 [ ] _transaction summary component Design_ - Start and End date balances are a little confusing.  
-[ ] _Material UI Improvements_ - Play with the Material UI theme to change overall color palette
+[ ] _Material UI Improvements_ - Play with the Material UI theme to change overall color palette  
 [ ] _Table Row Selection_ - Initially had plans to use table row selection to exclude and include transactions in aggregates. Need to remove table row selection or make it useful. Leaving it in without functionality is confusing.
 
 #### state management
