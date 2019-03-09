@@ -41,7 +41,7 @@ A user can bookmark a particular address with or without filters to reference th
 
 This is a react application using redux & saga for state management.
 
-We have another md file with a [detailed architecture](arch.md) discussion.
+We have another doc that dives into [detailed architecture](arch.md).
 
 ## design
 

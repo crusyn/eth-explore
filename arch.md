@@ -1,16 +1,20 @@
-## architecture
+# architecture
 
 This is a react application using redux & saga for state management.
 
-### react components
+## react components
 
 The `containers/AllTransactionsContainer.js` and `components/AllTransactions.js` contain all other components in the app.
 
-### redux
+Each pure stateless component has it's own associated container.
+
+## redux
 
 This app uses redux to make it easy to understand the applications data flow and state transitions.
 
-#### overall application flow
+### overall application flow
+
+#### user input
 
 1. _User Query or Filter_ - The user searches for an _ethereum address_ or _filters the current view with a date range_.
 2. _Action Dispatched_ - The search or filter form submit dispatches a `SEARCH/` or `FILTER/` action to the store.
@@ -21,7 +25,15 @@ _Invalid Action_ - If the input is invalid it will push a `/FAILURE` action with
 
 3. In the case of a _Valid Action_ a `connected-react-router` pushes a `@@router/CALL_HISTORY_METHOD` change to the /{address} or ?queryParams
 
-4. _Location Change_ - If the location changes the `AllTransactionsContainer` lifecycle method hears the location change and dispatches a `TRANSACTIONS/GET_TRANSACTIONS/CALL` with the new `address`, `startDate`, and/or `endDate` from the URL.
+#### url change & fetch data
+
+A URL change can occur when:
+
+- the user changes the URL manually by clicking a browser bookmark
+- the user clicks on a link in the ETH Explore app
+- a url change is dispatched to the store
+
+4. _Location Change or Page Load_ - If the location changes the `AllTransactionsContainer` lifecycle method hears the location change and dispatches a `TRANSACTIONS/GET_TRANSACTIONS/CALL` with the new `address`, `startDate`, and/or `endDate` from the URL.
 
 5. _Reducers in Loading State_ - The .loading members of the `account` and `transactions` reducers will be set to `true` and the `TransactionDataGrid` and `Transaction Summary` will show a loading progress animation.
 
@@ -33,7 +45,9 @@ _FAILURE_ - If the `GET_TRANSACTIONS/CALL` fails the account and transactions re
 
 Either way the `.loading` member is set to `false`.
 
-7. _Components Updated_ - The `Transaction Summary` and `TransactionDataGrid` loading animation is replaced with rendered `account` and `transactions` data from the store.
+#### update components
+
+7. _Components Updated_ - The `Transaction Summary` and `TransactionDataGrid` loading animation is replaced with rendered `account` and `transactions` data from the store as soon as they are notified that the store has been updated.
 
 ### reducers
 
@@ -43,9 +57,9 @@ There are three reducers:
 2. _account_ - stores account related information including `address`, `balance`, and aggregate transaction information.
 3. _search_ - the search reducers manages the state of search.
 
-#### `actions.js`
+### `actions.js`
 
-All actions that can be dispatched to the store and related types are listed in `actions.js`.
+All actions that can be dispatched to the store and related types are listed in [`actions.js`](actions.js).
 
 Each action type can be in three states:
 
@@ -59,19 +73,21 @@ Each action type can be in three states:
 
 #### `sagas/search.js`
 
-The `search.js` saga handles input into the search text field at the top of the app.
+The [`search.js`](sagas/search.js) saga handles input into the search text field at the top of the app.
 
 It is set up to be able to scale to adding other search terms such as blocks, transaction hashes, etc. The `search.js` saga determines the search type based on the input.
 
-A valid `searchQueryTypes.ADDRESS` search ultimately triggers a change to the address in the URL.
+A valid `searchQueryTypes.ADDRESS` search ultimately triggers a change to the address in the URL. See [overall app flow](#overall-application-flow).
 
 #### `sagas/filter.js`
 
-Similar to search, the filter saga checks the validity of the filter dates and then pushes them to the query string of the URI in the form: `start={startTime}&end={endTime}`
+Similar to search, the [filter saga](sagas/filter.js) checks the validity of the filter dates and then pushes them to the query string of the URI in the form: `start={startTime}&end={endTime}`.
+
+A valid filter ultimately triggers a change to the address in the URL. See [overall app flow](#overall-application-flow).
 
 #### `sagas/transactions.js` saga
 
-The Transactions saga is the workhorse of the app and performs all API fetches and state changes for both the account and transaction data.
+The [transactions saga](sagas/transactions.js) is the workhorse of the app and performs all API fetches and state changes for both the account and transaction data.
 
 It also performs calculations to determine transaction aggregates `totalIn`, `totalOut`, `gasFees`, `netChange`, `balanceForward`, and `balanceEndDate`.
 
