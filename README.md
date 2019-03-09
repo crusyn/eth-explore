@@ -52,3 +52,5 @@ Used Material UI components:
 - Typography throughout the app so it can quickly be updated with a new theme
 
 ### improvements
+
+Find a list of [design, testing, product, data and doc improvements to work on.](improvements.md)
