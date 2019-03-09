@@ -58,7 +58,7 @@ _Valid Action_ - If the action is valid the corresponding saga will push the `ad
 
 _Invalid Action_ - If the input is invalid it will push a `/FAILURE` action with the corresponding error. The source component will display the error to the user.
 
-3. In the case of a _Valid Action_ a corresponding `@@router/CALL_HISTORY_METHOD` pushing the change to the /{address} or ?queryParams
+3. In the case of a _Valid Action_ a `connected-react-router` pushes a `@@router/CALL_HISTORY_METHOD` change to the /{address} or ?queryParams
 
 4. _Location Change_ - If the location changes the `AllTransactionsContainer` lifecycle method hears the location change and dispatches a `TRANSACTIONS/GET_TRANSACTIONS/CALL` with the new `address`, `startDate`, and/or `endDate` from the URL.
 
